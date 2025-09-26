@@ -136,16 +136,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-html-report
-          working-directory: e2e
-          path: test-results/playwright/html/**
+          path: e2e/test-results/playwright/html/**
 
       - name: Upload Playwright junit & artifacts (always)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-artifacts
-          working-directory: e2e
           path: |
-            test-results/playwright/junit.xml
-            test-results/playwright/**/*
-            test-results/playwright
+            e2e/test-results/playwright/junit.xml
+            e2e/test-results/playwright/**/*
+            e2e/test-results/playwright
