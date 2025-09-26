@@ -128,19 +128,24 @@ jobs:
         working-directory: e2e
         run: npx playwright test --reporter=list
 
+      - name: List Playwright results
+        run: ls -R e2e/test-results/playwright || echo "No results found"
+
       - name: Upload Playwright HTML Report (always)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-html-report
-          path: e2e/test-results/playwright/html/**
+          working-directory: e2e
+          path: test-results/playwright/html/**
 
       - name: Upload Playwright junit & artifacts (always)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-artifacts
+          working-directory: e2e
           path: |
-            e2e/test-results/playwright/junit.xml
-            e2e/test-results/playwright/**/*
-            e2e/test-results/playwright
+            test-results/playwright/junit.xml
+            test-results/playwright/**/*
+            test-results/playwright
