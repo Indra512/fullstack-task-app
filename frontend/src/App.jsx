@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:4000";
+
 function App() {
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
 
   // Fetch tasks from backend
   const fetchTasks = async () => {
-    const res = await fetch("http://localhost:4000/tasks");
+    const res = await fetch(`${API_URL}/tasks`);
     const data = await res.json();
     setTasks(data);
   };
@@ -17,7 +19,7 @@ function App() {
 
   // Add new task
   const addTask = async () => {
-    await fetch("http://localhost:4000/tasks", {
+    await fetch(`${API_URL}/tasks`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title }),
@@ -28,7 +30,7 @@ function App() {
 
   // Update status
   const updateTask = async (id, status) => {
-    await fetch(`http://localhost:4000/tasks/${id}`, {
+    await fetch(`${API_URL}/tasks/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
@@ -38,7 +40,7 @@ function App() {
 
   // Delete task
   const deleteTask = async (id) => {
-    await fetch(`http://localhost:4000/tasks/${id}`, { method: "DELETE" });
+    await fetch(`${API_URL}/tasks/${id}`, { method: "DELETE" });
     fetchTasks();
   };
 
