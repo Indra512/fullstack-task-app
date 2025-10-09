@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { API_URL } from "./config";
+import { API_URL } from "../config.js";
 
 function App() {
   const [tasks, setTasks] = useState([]);
