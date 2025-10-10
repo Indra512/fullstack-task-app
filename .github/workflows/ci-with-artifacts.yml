@@ -8,6 +8,7 @@ on:
 
 env:
   CI: true
+  VITE_API_URL: http://localhost:4000
   
 jobs:
   # ---------------------------
@@ -123,6 +124,7 @@ jobs:
         run: |
           npx wait-on http://localhost:4000/tasks
           npx wait-on http://localhost:5173
+          sleep 3
 
       - name: Run Playwright tests
         working-directory: e2e
