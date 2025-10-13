@@ -13,7 +13,7 @@ env:
 
 jobs:
   deploy-frontend:
-    if: ${{ github.event.workflow_run.conclusion == 'sucess' }} # ✅ only if CI succeeded
+    if: ${{ github.event.workflow_run.conclusion == 'success' }} # ✅ only if CI succeeded
     runs-on: ubuntu-latest
     defaults:
       run:
