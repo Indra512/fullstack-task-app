@@ -1,14 +1,19 @@
 name: Deploy Frontend to Github Pages
 
 on:
-  push:
-    branches: [ main ]
+  workflow_run:
+    workflows: ["CI Pipeline (unit + e2e)"]
+    types:
+      - completed
+  # push:
+  #   branches: [ main ]
 
 env:
     VITE_API_URL: https://fullstack-task-app.onrender.com
 
 jobs:
   deploy-frontend:
+    if: ${{ github.event.workflow_run.conclusion == 'sucess' }} # ✅ only if CI succeeded
     runs-on: ubuntu-latest
     defaults:
       run:
