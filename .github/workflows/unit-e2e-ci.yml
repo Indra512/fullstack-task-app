@@ -1,4 +1,4 @@
-name: Unit And E2E Tests
+name: CI-CD: Unit-E2E-Tests
 
 on:
   push:
