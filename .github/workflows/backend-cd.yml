@@ -1,8 +1,8 @@
-name: CI-CD: Deploy-Backend
+name: Deploy Backend to Render (after CI)
 
 on:
   workflow_run:
-    workflows: ["CI-CD: Unit-E2E-Tests"] 
+    workflows: ["Unit And E2E Tests"]
     types:
       - completed
 
