@@ -2,7 +2,7 @@ name: 🔍 Debug CD Trigger
 
 on:
   workflow_run:
-    workflows: ["CI Pipeline (unit + e2e)"]  # Must match the CI workflow's name exactly
+    workflows: ["CI Pipeline"]  # Must match the CI workflow's name exactly
     types:
       - completed
 
