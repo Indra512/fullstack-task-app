@@ -1,4 +1,4 @@
-name: Deploy Backend to Render (after CI)
+name: Deploy Backend to Render
 
 on:
   workflow_run:
