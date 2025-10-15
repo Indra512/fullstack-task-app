@@ -3,5 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: "/fullstack-task-app/", // 👈 this must match your GitHub repo name
+  base: process.env.VITE_DEPLOY_ENV === "gh-pages" ? "/fullstack-task-app/" : "/",
 });

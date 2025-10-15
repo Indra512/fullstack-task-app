@@ -10,6 +10,7 @@ on:
 
 env:
     VITE_API_URL: https://fullstack-task-app.onrender.com
+    VITE_DEPLOY_ENV: gh-pages
 
 jobs:
   deploy-frontend:
