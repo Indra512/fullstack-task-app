@@ -28,7 +28,7 @@ Add Docker support for both.
 FROM node:20-alpine
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm ci
 COPY . .
 EXPOSE 4000
 CMD ["npm", "start"]
@@ -97,8 +97,8 @@ on:
 
 env:
   REGISTRY: docker.io
-  IMAGE_BACKEND: your-dockerhub-username/task-backend
-  IMAGE_FRONTEND: your-dockerhub-username/task-frontend
+  IMAGE_BACKEND: ${{ secrets.DOCKERHUB_USERNAME }}/task-backend
+  IMAGE_FRONTEND: ${{ secrets.DOCKERHUB_USERNAME }}/task-frontend
 
 jobs:
   build-and-push:
@@ -160,31 +160,7 @@ You’ll see in Docker Hub:
 
 ---
 
-## 🚀 Step 7. (Optional) Run E2E Tests in Docker
-
-```yaml
-  e2e-tests:
-    runs-on: ubuntu-latest
-    needs: build-and-push
-    steps:
-      - name: Pull and run containers
-        run: |
-          docker run -d -p 4000:4000 --name backend your-dockerhub-username/task-backend:latest
-          docker run -d -p 5173:80 --name frontend your-dockerhub-username/task-frontend:latest
-
-      - name: Wait for services
-        run: |
-          npx wait-on http://localhost:4000/tasks
-          npx wait-on http://localhost:5173
-
-      - name: Run E2E Tests
-        working-directory: e2e
-        run: npx playwright test
-```
-
----
-
-## 🎓 Step 8. What You’ve Achieved
+## 🎓 Step 7. What You’ve Achieved
 
 ✅ Full CI/CD with Docker and GitHub Actions  
 ✅ Automated build + push to Docker Hub  

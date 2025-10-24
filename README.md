@@ -42,8 +42,8 @@ fullstack-task-app/
 └── .github/
     └── workflows/
         ├── unit-e2e-ci.yml
-        ├── deploy-frontend.yml
-        └── deploy-backend.yml
+        ├── frontend-cd.yml
+        └── backend-cd.yml
 ```
 
 ---
@@ -52,7 +52,7 @@ fullstack-task-app/
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/<your-username>/fullstack-task-app.git
+git clone https://github.com/Indra512/fullstack-task-app.git
 cd fullstack-task-app
 ```
 
@@ -193,68 +193,76 @@ This is done via the `workflow_run` event.
 
 ---
 
-### 🧩 Frontend Deployment Workflow: `.github/workflows/deploy-frontend.yml`
+### 🧩 Frontend Deployment Workflow: `.github/workflows/frontend-cd.yml`
 
 ```yaml
-name: Deploy-Frontend
+name: Deploy Frontend to Github Pages
 
 on:
   workflow_run:
     workflows: ["Unit And E2E Tests"]
-    types: [completed]
+    types:
+      - completed
+
+env:
+    VITE_API_URL: https://fullstack-task-app.onrender.com
+    VITE_DEPLOY_ENV: gh-pages
 
 jobs:
-  deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  deploy-frontend:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }} # ✅ only if CI succeeded
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: frontend
-    env:
-      VITE_API_URL: https://your-backend.onrender.com
-
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
 
-      - run: npm ci
-      - run: npm run build
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Deploy to Render
-        uses: johnbeynon/render-deploy-action@v1
-        with:
-          service-id: ${{ secrets.RENDER_FRONTEND_SERVICE_ID }}
-          api-key: ${{ secrets.RENDER_API_KEY }}
+      - name: Build frontend
+        run: npm run build
+
+      - name: Deploy to Github Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with: 
+          github_token: ${{ secrets.TOKEN }}
+          publish_dir: frontend/dist
 ```
 
 ---
 
-### 🧩 Backend Deployment Workflow: `.github/workflows/deploy-backend.yml`
+### 🧩 Backend Deployment Workflow: `.github/workflows/backend-cd.yml`
 
 ```yaml
-name: Deploy-Backend
+name: Deploy Backend to Render
 
 on:
   workflow_run:
     workflows: ["Unit And E2E Tests"]
-    types: [completed]
+    types:
+      - completed
 
 jobs:
-  deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  deploy-backend:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }} # ✅ only if CI succeeded
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Deploy Backend to Render
-        uses: johnbeynon/render-deploy-action@v1
-        with:
-          service-id: ${{ secrets.RENDER_BACKEND_SERVICE_ID }}
-          api-key: ${{ secrets.RENDER_API_KEY }}
+      - name: Trigger Render deploy
+        run: |
+          echo "Triggering Render deploy for backend..."
+          curl -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys" \
+            -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+            -H "Content-Type: application/json"
 ```
 
 ---
@@ -266,8 +274,6 @@ Set these under:
 | Secret Name | Description |
 |--------------|-------------|
 | `RENDER_API_KEY` | Render API key |
-| `RENDER_BACKEND_SERVICE_ID` | Backend service ID from Render |
-| `RENDER_FRONTEND_SERVICE_ID` | Frontend service ID from Render |
 
 ---
 
