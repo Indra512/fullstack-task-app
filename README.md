@@ -12,7 +12,8 @@ This project is a **learning-focused full-stack application** built to understan
 | Backend | Node.js + Express |
 | Testing | Jest, React Testing Library, Supertest, Playwright |
 | CI/CD | GitHub Actions |
-| Deployment | Render (Frontend & Backend) |
+| Deployment Frontend | Github Pages |
+| Deployment Backend | Render |
 
 ---
 
@@ -291,10 +292,8 @@ Set these under:
 ---
 
 ## 🧭 Future Enhancements
-
-- 🐳 Add **Docker Compose** for unified local setup  
+  
 - ☁️ Add database (MongoDB / PostgreSQL)  
-- 🧩 Add GitHub Pages deployment for static frontend  
 - 🧪 Add visual regression tests (Playwright + Percy)  
 - 🔔 Add Slack notifications for build/deploy status  
 
